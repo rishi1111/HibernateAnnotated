@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="lti.movieactor">
+	<!-- for class Movie -->
+	<class name="Movie" table="movie">
+		<!-- for movieId(PK) create column movie_id -->
+		<id name="movieId" column="movie_id">
+			<generator class="increment"></generator> <!-- auto increment -->
+		</id>
+		<property name="title" /> <!-- for strings title and genre -->
+		<property name="genre" />
+
+		<!-- since we have a Set<Actors> actors in -->
+		<set name="actors" cascade="save-update,delete" inverse="true">
+
+			<!-- The <key> element is the column in the ACTORS table that holds the 
+				foreign key (movie_id ) to the parent object i.e. table Movie. -->
+
+			<key column="movie_id" on-delete="cascade"></key>
+
+			<one-to-many class="Actor" />
+		</set>
+
+	</class>
+
+	<class name="Actor" table="actor">
+		<id name="actorId" column="actor_id">
+			<generator class="increment"></generator>
+		</id>
+		<property name="actorName" />
+		
+		<!-- name =  private Movie movie; -->
+		<!-- column = movie_id is that column in parent table  -->
+		<many-to-one class="Movie" name="movie" column="movie_id"
+			not-null="true" />
+
+	</class>
+
+</hibernate-mapping>
